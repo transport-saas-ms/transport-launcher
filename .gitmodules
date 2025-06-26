@@ -1,3 +1,6 @@
 [submodule "users-ms"]
 	path = users-ms
 	url = https://github.com/transport-saas-ms/users-ms.git
+[submodule "client-gateway"]
+	path = client-gateway
+	url = https://github.com/transport-saas-ms/client-gateway.git
