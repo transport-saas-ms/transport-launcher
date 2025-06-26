@@ -1,0 +1,3 @@
+[submodule "users-ms"]
+	path = users-ms
+	url = https://github.com/transport-saas-ms/users-ms.git
