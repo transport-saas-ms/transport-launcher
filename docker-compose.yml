@@ -4,6 +4,32 @@ services:
     ports:
       - "4222:4222"
 
+# CLIENT GATEWAY
+  client-gateway:
+    build: ./client-gateway
+    ports:
+      - "${CLIENT_GATEWAY_PORT}:${CLIENT_GATEWAY_PORT}"
+    volumes:
+      - ./client-gateway/src:/usr/src/app/src
+    command: npm run start:dev
+    environment:
+      - PORT=3000
+      - NATS_SERVERS=nats://nats-server:4222
+
+# USERS DATABASE
+  users-db:
+    container_name: users_database
+    image: postgres:17.5
+    restart: always
+    volumes:
+      - ./users-ms/postgres:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=usersdb
+
 # USERS MS
   users-ms:
     build: ./users-ms
@@ -16,3 +42,6 @@ services:
       - PORT=3001
       - NATS_SERVERS=nats://nats-server:4222
       - DATABASE_URL=postgresql://postgres:admin@users-db:5432/usersdb
+    depends_on:
+      - users-db
+      - nats-server
