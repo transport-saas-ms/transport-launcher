@@ -1,9 +1,5 @@
 # Transport SaaS - Plataforma de Microservicios
 
-<p align="center">
-  <img src="https://via.placeholder.com/200x200.png?text=Transport+SaaS" alt="Transport SaaS Logo" width="200" height="200">
-</p>
-
 ## Descripción
 
 Transport SaaS es una plataforma completa basada en microservicios para la gestión de empresas de transporte. El sistema permite administrar usuarios con diferentes roles, empresas, vehículos, rutas y más, todo mediante una arquitectura moderna y escalable.
