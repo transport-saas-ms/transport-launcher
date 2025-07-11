@@ -38,7 +38,7 @@ services:
     volumes:
       - ./users-ms/src:/usr/src/app/src
       - ./users-ms/prisma:/usr/src/app/prisma
-    command: sh -c "npx prisma migrate deploy && npx prisma generate && npm run start:dev"
+    command: sh -c "npx prisma migrate deploy && npm run start:dev"
     environment:
       - PORT=3001
       - NATS_SERVERS=nats://nats-server:4222
@@ -46,3 +46,39 @@ services:
     depends_on:
       - users-db
       - nats-server
+
+# AUTH DATABASE
+  auth-db:
+    container_name: auth_database
+    image: postgres:17.5
+    restart: always
+    volumes:
+      - ./auth-ms/postgres:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=authdb
+
+# AUTH MS
+  auth-ms:
+    build: ./auth-ms
+    ports:
+      - "${AUTH_MS_PORT}:${AUTH_MS_PORT}"
+    volumes:
+      - ./auth-ms/src:/usr/src/app/src
+      - ./auth-ms/prisma:/usr/src/app/prisma
+    command: sh -c "npx prisma migrate deploy && npm run start:dev"
+    environment:
+      - PORT=3002
+      - NATS_SERVERS=nats://nats-server:4222
+      - DATABASE_URL=postgresql://postgres:admin@auth-db:5432/authdb
+      - JWT_SECRET=${JWT_SECRET}
+      - JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET}
+      - JWT_EXPIRATION_TIME=3600
+      - JWT_REFRESH_EXPIRATION_TIME=604800
+    depends_on:
+      - auth-db
+      - nats-server
+      - users-ms
