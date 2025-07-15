@@ -7,3 +7,6 @@
 [submodule "auth-ms"]
 	path = auth-ms
 	url = https://github.com/transport-saas-ms/auth-ms.git
+[submodule "trips-ms"]
+	path = trips-ms
+	url = https://github.com/transport-saas-ms/trips-ms.git
