@@ -84,3 +84,35 @@ services:
       - auth-db
       - nats-server
       - users-ms
+
+# TRIPS DATABASE
+  trips-db:
+    container_name: trips_database
+    image: postgres:17.5
+    restart: always
+    volumes:
+      - ./trips-ms/postgres:/var/lib/postgresql/data
+    ports:
+      - "5434:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=tripsdb
+
+# TRIPS MS
+  trips-ms:
+    build: ./trips-ms
+    ports:
+      - "${TRIPS_MS_PORT}:${TRIPS_MS_PORT}"
+    volumes:
+      - ./trips-ms/src:/usr/src/app/src
+      - ./trips-ms/prisma:/usr/src/app/prisma
+    command: sh -c "npx prisma migrate deploy && npm run start:dev"
+    environment:
+      - PORT=3003
+      - NATS_SERVERS=nats://nats-server:4222
+      - DATABASE_URL=postgresql://postgres:admin@trips-db:5432/tripsdb
+    depends_on:
+      - trips-db
+      - nats-server
+      - auth-ms
