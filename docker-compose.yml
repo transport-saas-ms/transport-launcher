@@ -116,3 +116,35 @@ services:
       - trips-db
       - nats-server
       - auth-ms
+
+# EXPENSES DATABASE
+  expenses-db:
+    container_name: expenses_database
+    image: postgres:17.5
+    restart: always
+    volumes:
+      - ./expenses-ms/postgres:/var/lib/postgresql/data
+    ports:
+      - "5435:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=expensesdb
+
+# EXPENSES MS
+  expenses-ms:
+    build: ./expenses-ms
+    ports:
+      - "${EXPENSES_MS_PORT}:${EXPENSES_MS_PORT}"
+    volumes:
+      - ./expenses-ms/src:/usr/src/app/src
+      - ./expenses-ms/prisma:/usr/src/app/prisma
+    command: sh -c "npx prisma migrate deploy && npm run start:dev"
+    environment:
+      - PORT=3004
+      - NATS_SERVERS=nats://nats-server:4222
+      - DATABASE_URL=postgresql://postgres:admin@expenses-db:5432/expensesdb
+    depends_on:
+      - expenses-db
+      - nats-server
+      - trips-ms
