@@ -10,3 +10,6 @@
 [submodule "trips-ms"]
 	path = trips-ms
 	url = https://github.com/transport-saas-ms/trips-ms.git
+[submodule "expenses-ms"]
+	path = expenses-ms
+	url = https://github.com/transport-saas-ms/expenses-ms.git
