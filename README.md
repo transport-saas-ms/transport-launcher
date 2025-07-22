@@ -11,16 +11,18 @@ La plataforma sigue una arquitectura de microservicios con un API Gateway como p
 - **Client Gateway**: API Gateway que recibe todas las solicitudes del cliente y las enruta a los microservicios correspondientes.
 - **Auth Microservice**: Gestiona la autenticación, autorización y sesiones de usuario.
 - **Users Microservice**: Administra los usuarios, roles y asociaciones con empresas.
+- **Trips Microservice**: Maneja viajes, rutas y gastos asociados.
+- **Expenses Microservice**: Gestiona gastos de viajes y reportes financieros.
 - **NATS**: Sistema de mensajería que facilita la comunicación entre microservicios.
 - **Bases de datos PostgreSQL**: Cada microservicio tiene su propia base de datos independiente.
 
 ### Diagrama de la arquitectura
 
 ```
-Cliente <-> Client Gateway <-> [NATS] <-> Microservicios (Auth, Users, etc.)
+Cliente <-> Client Gateway <-> [NATS] <-> Microservicios (Auth, Users, Trips, Expenses)
                                            |
                                            v
-                                        Bases de datos
+                                        Bases de datos PostgreSQL
 ```
 
 ## Tecnologías utilizadas
