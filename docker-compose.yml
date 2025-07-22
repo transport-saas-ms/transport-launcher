@@ -107,7 +107,7 @@ services:
     volumes:
       - ./trips-ms/src:/usr/src/app/src
       - ./trips-ms/prisma:/usr/src/app/prisma
-    command: sh -c "npx prisma migrate deploy && npm run start:dev"
+    command: sh -c "npx prisma generate && npx prisma migrate deploy && npm run start:dev"
     environment:
       - PORT=3003
       - NATS_SERVERS=nats://nats-server:4222
